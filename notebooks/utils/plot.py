@@ -53,3 +53,28 @@ def plot_features(data, labels):
             axes[i, j].set_title(f"Classe {i} - Feature {j}")
     plt.tight_layout()
     plt.show()
+
+
+def plot_thresholds(data: np.array, labels: np.array, masks: np.array) -> None:
+
+    n_plots = len(masks) - 1
+
+    fig, ax = plt.subplots(n_plots, figsize=(12, 10))
+
+    for i, mask in enumerate(masks[1:]):
+        masked_data = data[mask]
+        masked_labels = labels[mask]
+
+        ax[i].scatter(
+            masked_data[:, 0],
+            masked_data[:, 1],
+            c=masked_labels,
+            cmap="viridis",
+            edgecolor="k",
+            alpha=0.5,
+        )
+        ax[i].set_title(f"Máscara {i + 1} - {masked_data.shape[0]} amostras")
+        ax[i].grid()
+
+    plt.tight_layout()
+    plt.show()
