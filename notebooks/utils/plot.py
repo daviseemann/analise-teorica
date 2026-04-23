@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from utils.select_lib import rejector
+from utils.metrics import error
 
 
-def plot_2D(data: np.array, labels: np.array) -> None:
+def plot_2D(data: np.array, labels: np.array, figsize=(12, 10)) -> None:
 
     n_classes = np.unique(labels).size
 
-    fig = plt.figure(figsize=(12, 10))
+    fig = plt.figure(figsize=figsize)
     gs = fig.add_gridspec(2, 2, height_ratios=[2, 1])
 
     ax1 = fig.add_subplot(gs[0, :])  # ocupa as 2 colunas (gráfico 1)
@@ -55,25 +57,35 @@ def plot_features(data, labels):
     plt.show()
 
 
-def plot_thresholds(data: np.array, labels: np.array, masks: np.array) -> None:
+def plot_thresholds(
+    data: np.array,
+    labels: np.array,
+    preds: np.array,
+    confidence: np.array,
+    thresholds: list,
+) -> None:
 
-    n_plots = len(masks) - 1
+    n_plots = len(thresholds) - 1
 
-    fig, ax = plt.subplots(n_plots, figsize=(12, 10))
+    fig, ax = plt.subplots(n_plots, figsize=(10, 10))
 
-    for i, mask in enumerate(masks[1:]):
+    for i, threshold in enumerate(thresholds[1:]):
+        mask = rejector(confidence, threshold)
         masked_data = data[mask]
-        masked_labels = labels[mask]
+        accuracia = 1 - error(labels[mask], preds[mask])
+        error_mask = labels[mask] != preds[mask]
 
         ax[i].scatter(
             masked_data[:, 0],
             masked_data[:, 1],
-            c=masked_labels,
+            c=error_mask,
             cmap="viridis",
             edgecolor="k",
             alpha=0.5,
         )
-        ax[i].set_title(f"Máscara {i + 1} - {masked_data.shape[0]} amostras")
+        ax[i].set_title(
+            f"Máscara com {threshold=} - {masked_data.shape[0]} amostras, accuracia={accuracia:.2f}"
+        )
         ax[i].grid()
 
     plt.tight_layout()

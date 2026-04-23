@@ -29,7 +29,4 @@ def generate_data(
         [np.array([i] * len(samples)) for i, samples in enumerate(class_samples)]
     )
 
-    if groups is None:
-        groups = labels  # Cada classe é um grupo diferente
-
-    return data, labels, groups
+    return data, labels
