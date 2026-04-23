@@ -15,10 +15,14 @@ def plot_2D(data: np.array, labels: np.array, figsize=(12, 10)) -> None:
     ax2 = fig.add_subplot(gs[1, 0])  # gráfico 2
     ax3 = fig.add_subplot(gs[1, 1])  # gráfico 3
 
-    ax1.scatter(data[:, 0], data[:, 1], c=labels, cmap="viridis", edgecolor="k")
+    for i in range(n_classes):
+        class_data = data[labels == i]
+        ax1.scatter(class_data[:, 0], class_data[:, 1], alpha=0.8, label=f"Classe {i}")
+
     ax1.set_xlabel("x1")
     ax1.set_ylabel("x2")
     ax1.set_title("Dados Gaussianos")
+    ax1.legend()
     ax1.grid()
 
     for i in range(n_classes):
