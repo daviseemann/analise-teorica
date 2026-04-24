@@ -17,7 +17,12 @@ def plot_2D(data: np.array, labels: np.array, figsize=(12, 10)) -> None:
 
     for i in range(n_classes):
         class_data = data[labels == i]
-        ax1.scatter(class_data[:, 0], class_data[:, 1], alpha=0.8, label=f"Classe {i}")
+        ax1.scatter(
+            class_data[:, 0],
+            class_data[:, 1],
+            alpha=0.4,
+            label=f"Classe {i}, n={class_data.shape[0]}",
+        )
 
     ax1.set_xlabel("x1")
     ax1.set_ylabel("x2")
@@ -71,7 +76,7 @@ def plot_thresholds(
 
     n_plots = len(thresholds) - 1
 
-    fig, ax = plt.subplots(n_plots, figsize=(10, 10))
+    fig, ax = plt.subplots(n_plots, figsize=(4, 5 * n_plots))
 
     for i, threshold in enumerate(thresholds[1:]):
         mask = rejector(confidence, threshold)
