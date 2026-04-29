@@ -24,9 +24,13 @@ def classifier(prob, **kwargs):
     return pred, confidence
 
 
-def rejector(confidence, threshold=None):
+def selector(confidence, threshold=None):
     index = np.argsort(confidence)[::-1]
     if threshold is None:
         return index
-    accepted_indices = index[confidence[index] >= threshold]
+    accepted_indices = index[confidence[index] <= threshold]
     return accepted_indices
+
+
+def hari_selector():
+    pass

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from utils.select_lib import rejector
-from utils.metrics import error
+from utils.select_lib import selector
+from utils.metrics import balanced_error
 
 
 def plot_2D(data: np.array, labels: np.array, figsize=(12, 10)) -> None:
@@ -79,9 +79,9 @@ def plot_thresholds(
     fig, ax = plt.subplots(n_plots, figsize=(4, 5 * n_plots))
 
     for i, threshold in enumerate(thresholds[1:]):
-        mask = rejector(confidence, threshold)
+        mask = selector(confidence, threshold)
         masked_data = data[mask]
-        accuracia = 1 - error(labels[mask], preds[mask])
+        accuracia = 1 - balanced_error(labels[mask], preds[mask])
         error_mask = labels[mask] != preds[mask]
 
         ax[i].scatter(
